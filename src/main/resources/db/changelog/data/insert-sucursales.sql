@@ -1,0 +1,10 @@
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Central', 'Av. 9 de Julio 1234, CABA');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Norte', 'Calle Belgrano 500, Córdoba');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Sur', 'Ruta 3 Km 2900, Ushuaia');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Litoral', 'Rivadavia 10, Corrientes');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Cuyo', 'San Martín 870, Mendoza');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Patagonia Este', 'Av. Roca 45, Comodoro Rivadavia');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Centro', 'Lima 1500, Rosario');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Oeste', 'Acceso Oeste 3400, Buenos Aires');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Microcentro', 'Florida 201, CABA');
+  INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal de Prueba', 'Calle Falsa 123, Springfield');

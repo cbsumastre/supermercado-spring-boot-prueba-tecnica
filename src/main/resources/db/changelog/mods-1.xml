@@ -16,20 +16,8 @@
       </column>
     </createTable>
 
-    <sql>
-      <![CDATA[ 
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Central', 'Av. 9 de Julio 1234, CABA');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Norte', 'Calle Belgrano 500, Córdoba');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Sur', 'Ruta 3 Km 2900, Ushuaia');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Litoral', 'Rivadavia 10, Corrientes');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Cuyo', 'San Martín 870, Mendoza');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Patagonia Este', 'Av. Roca 45, Comodoro Rivadavia');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Centro', 'Lima 1500, Rosario');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Oeste', 'Acceso Oeste 3400, Buenos Aires');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Microcentro', 'Florida 201, CABA');
-        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal de Prueba', 'Calle Falsa 123, Springfield');
-      ]]>
-    </sql>
+    <sqlFile path="data/insert-sucursales.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
+
 
   </changeSet>
 
@@ -56,10 +44,10 @@
       <column name="nombre" type="VARCHAR(200)">
         <constraints nullable="false"/>
       </column>
-      <column name="id_categoria" type="VARCHAR(200)">
+      <column name="categoria_id" type="VARCHAR(200)">
         <constraints nullable="false"/>
       </column>
-      <column name="unidades" type="INT" defaultValueNumeric="0">
+      <column name="stock" type="INT" defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
       <column name="precio" type="NUMERIC(10,2)">
@@ -67,9 +55,58 @@
       </column>
     </createTable>
 
-    <addForeignKeyConstraint baseTableName="producto" baseColumnNames="id_categoria" constraintName="fk_producto_categoria" referencedTableName="categoria" referencedColumnNames="id" />
+    <addForeignKeyConstraint baseTableName="producto" baseColumnNames="categoria_id" constraintName="fk_producto_categoria" referencedTableName="categoria" referencedColumnNames="id" />
 
-    <sqlFile path="db/changelog/data/insert-productos.sql" relativeToChangelogFile="false" splitStatements="true" stripComments="true" encoding="UTF-8" />
+    <sqlFile path="data/insert-productos.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8" />
+
+  </changeSet>
+
+  <changeSet id="4" author="cbsumastre">
+    <createTable tableName="VENTA">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="fecha" type="DATETIME">
+        <constraints nullable="false"/>
+      </column>
+      <column name="estado" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="sucursal_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="VENTA" baseColumnNames="sucursal_id" constraintName="fk_venta_sucursal" referencedTableName="SUCURSAL" referencedColumnNames="id" onDelete="RESTRICT" />
+
+    <sqlFile path="data/insert-ventas.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
+
+  </changeSet>
+
+  <changeSet id="5" author="cbsumastre">
+    <createTable tableName="DETALLE_VENTA">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="venta_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="producto_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="cantidad" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="precio" type="NUMERIC(10,2)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="DETALLE_VENTA" baseColumnNames="venta_id" constraintName="fk_venta_detalle_venta" referencedTableName="VENTA" referencedColumnNames="id" onDelete="RESTRICT"/>
+    <addForeignKeyConstraint baseTableName="DETALLE_VENTA" baseColumnNames="producto_id" constraintName="fk_venta_detalle_producto" referencedTableName="PRODUCTO" referencedColumnNames="id" onDelete="RESTRICT"/>
+
+    <sqlFile path="data/insert-detalle-ventas.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
 
   </changeSet>
 
