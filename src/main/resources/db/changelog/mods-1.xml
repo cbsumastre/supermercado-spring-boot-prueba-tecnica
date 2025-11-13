@@ -50,7 +50,7 @@
       <column name="stock" type="INT" defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
-      <column name="precio" type="NUMERIC(10,2)">
+      <column name="precio" type="DOUBLE">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -98,7 +98,7 @@
       <column name="cantidad" type="INT">
         <constraints nullable="false"/>
       </column>
-      <column name="precio" type="NUMERIC(10,2)">
+      <column name="precio" type="DOUBLE">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -107,6 +107,33 @@
     <addForeignKeyConstraint baseTableName="DETALLE_VENTA" baseColumnNames="producto_id" constraintName="fk_venta_detalle_producto" referencedTableName="PRODUCTO" referencedColumnNames="id" onDelete="RESTRICT"/>
 
     <sqlFile path="data/insert-detalle-ventas.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
+
+  </changeSet>
+
+
+  <changeSet id="6" author="cbsumastre">
+    <addColumn tableName="VENTA">
+      <column name="TOTAL" type="DOUBLE" defaultValueNumeric="0">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+    <sql>
+      <![CDATA[ 
+          UPDATE VENTA
+          SET total = (
+          -- La subconsulta calcula la suma total para la VENTA actual (referenciada por VENTA.id)
+          SELECT 
+              SUM(dv.cantidad * dv.precio)
+          FROM 
+              DETALLE_VENTA dv
+          -- Correlación: solo suma los detalles que corresponden a la VENTA que se está actualizando
+          WHERE 
+              dv.venta_id = VENTA.id);
+          UPDATE VENTA SET TOTAL=0 WHERE TOTAL IS NULL;
+      ]]>
+    </sql>
+
+    <addNotNullConstraint tableName="VENTA" columnName="TOTAL" />
 
   </changeSet>
 
