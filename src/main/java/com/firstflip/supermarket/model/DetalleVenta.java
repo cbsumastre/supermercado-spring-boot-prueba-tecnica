@@ -1,15 +1,32 @@
 package com.firstflip.supermarket.model;
 
-import java.math.BigDecimal;
-import lombok.Data;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DetalleVenta {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private Long idVenta;
-  private Long idProducto;
+
+  @ManyToOne
+  private Venta venta;
+
+  @ManyToOne
+  private Producto producto;
+
   private Integer cantidad;
-  private BigDecimal precioUnidad;
+
+  private Double precio;
 
 }
