@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+  <changeSet id="1" author="cbsumastre">
+    <createTable tableName="SUCURSAL">
+      <column name="id" type="IDENTITY">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="nombre" type="VARCHAR(200)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="direccion" type="VARCHAR(200)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <sql>
+      <![CDATA[ 
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Central', 'Av. 9 de Julio 1234, CABA');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Norte', 'Calle Belgrano 500, Córdoba');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Sur', 'Ruta 3 Km 2900, Ushuaia');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Litoral', 'Rivadavia 10, Corrientes');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Cuyo', 'San Martín 870, Mendoza');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Patagonia Este', 'Av. Roca 45, Comodoro Rivadavia');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Centro', 'Lima 1500, Rosario');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Oeste', 'Acceso Oeste 3400, Buenos Aires');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal Microcentro', 'Florida 201, CABA');
+        INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal de Prueba', 'Calle Falsa 123, Springfield');
+      ]]>
+    </sql>
+
+  </changeSet>
+
+  <changeSet id="2" author="cbsumastre">
+    <createTable tableName="CATEGORIA">
+      <column name="id" type="VARCHAR(200)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="descripcion" type="VARCHAR(200)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <sqlFile path="db/changelog/data/insert-categorias-producto.sql" relativeToChangelogFile="false" splitStatements="true" stripComments="true" encoding="UTF-8"/>
+
+  </changeSet>
+
+
+  <changeSet id="3" author="cbsumastre">
+    <createTable tableName="PRODUCTO">
+      <column name="id" type="IDENTITY">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="nombre" type="VARCHAR(200)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="id_categoria" type="VARCHAR(200)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unidades" type="INT" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="precio" type="NUMERIC(10,2)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="producto" baseColumnNames="id_categoria" constraintName="fk_producto_categoria" referencedTableName="categoria" referencedColumnNames="id" />
+
+    <sqlFile path="db/changelog/data/insert-productos.sql" relativeToChangelogFile="false" splitStatements="true" stripComments="true" encoding="UTF-8" />
+
+  </changeSet>
+
+
+</databaseChangeLog>
