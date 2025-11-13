@@ -27,6 +27,8 @@ public class Venta {
   @Enumerated(EnumType.STRING)
   private EnumEstadoVenta estado;
 
+  private Double total;
+
   @ManyToOne
   private Sucursal sucursal;
 
