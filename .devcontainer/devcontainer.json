@@ -1,0 +1,55 @@
+{
+	"name": "Prueba Técnica Supermercado - Spring Boot",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "."
+	},
+	"runArgs": [
+		"--net=host"
+	],
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"editor.insertSpaces": true
+			},
+			"extensions": [
+				"analytic-signal.preview-pdf",
+				"sdras.night-owl",
+				"christian-kohler.path-intellisense",
+				"steoates.autoimport",
+				"yzhang.markdown-all-in-one",
+				"redhat.java",
+				"vscjava.vscode-java-debug",
+				"vscjava.vscode-java-dependency",
+				"vscjava.vscode-java-test",
+				"vmware.vscode-boot-dev-pack",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				"redhat.vscode-xml",
+				"eriklynd.json-tools",
+				"esbenp.prettier-vscode",
+				"vscjava.vscode-maven",
+				"vscjava.vscode-java-pack",
+				"jbockle.jbockle-format-files",
+				"DotJoshJohnson.xml",
+				"vmware.vscode-spring-boot",
+				"juhahinkula.thymeleaf",
+				"MS-CEINTL.vscode-language-pack-es",
+				"tomoki1207.pdf"
+			]
+		}
+	},
+	"remoteUser": "vscode",
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.m2,target=/home/vscode/.m2,type=bind"
+	],
+	"workspaceFolder": "/workspace",
+	"postCreateCommand": "bash ./.devcontainer/scripts/post-create-command.sh",
+	"forwardPorts": [
+		9091
+	],
+	"shutdownAction": "stopContainer"
+}

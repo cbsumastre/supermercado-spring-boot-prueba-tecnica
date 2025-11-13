@@ -1,0 +1,43 @@
+{
+    "peacock.remoteColor": "#e6222c",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.saveActions.organizeImports": true,
+    "formatFiles.extensionsToInclude": "java",
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java",
+        "editor.formatOnSave": true,
+    },
+    "java.format.settings.url": "./.vscode/eclipse-java-google-style.xml",
+    "java.format.settings.profile": "GoogleStyle",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": true,
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "DotJoshJohnson.xml",
+        "editor.formatOnSave": true,
+    },
+    "editor.formatOnSave": true,
+    // "editor.fontSize": 12,
+    "editor.tabSize": 2,
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#eb5058",
+        "activityBar.background": "#eb5058",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#25e51a",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#eb5058",
+        "statusBar.background": "#e6222c",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#eb5058",
+        "statusBarItem.remoteBackground": "#e6222c",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#e6222c",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#e6222c99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+}
