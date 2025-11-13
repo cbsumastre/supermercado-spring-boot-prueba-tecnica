@@ -1,0 +1,23 @@
+package com.firstflip.supermarket.model;
+
+public enum CategoriaProducto {
+  ELECTRONICA_TECNOLOGIA,
+
+  HOGAR_COCINA,
+
+  MUEBLES_OFICINA,
+
+  AUDIO_VIDEO,
+
+  FOTOGRAFIA_DRONES,
+
+  DEPORTES_OCIO,
+
+  LIBROS_ARTE,
+
+  JARDINERIA_BRICOLAJE,
+
+  JUGUETES_JUEGOS,
+
+  MODA_CUIDADO_PERSONAL
+}
