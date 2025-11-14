@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,18 +28,6 @@ public class VentaController {
   @Autowired
   private VentaService ventaService;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<VentaDTO> getById(@NonNull @PathVariable Long id) {
-    return ResponseEntity.ok().body(ventaService.getById(id));
-  }
-
-  @PostMapping
-  public ResponseEntity<VentaDTO> registrarNuevaVenta(@NonNull @RequestBody VentaDTO ventaDTO) {
-    var venta = ventaService.create(ventaDTO);
-    return ResponseEntity
-        .created(Objects.requireNonNull(URI.create("/api/ventas/" + venta.getId()))).body(venta);
-  }
-
   @GetMapping
   public ResponseEntity<List<VentaDTO>> obtenerVentasConFiltros(
       @RequestParam(name = "sucursalId", required = false) Long sucursalId,
@@ -52,6 +41,25 @@ public class VentaController {
     }
     return ResponseEntity.ok().body(ventas);
   }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<VentaDTO> getById(@NonNull @PathVariable Long id) {
+    return ResponseEntity.ok().body(ventaService.getById(id));
+  }
+
+  @PostMapping
+  public ResponseEntity<VentaDTO> registrarNuevaVenta(@NonNull @RequestBody VentaDTO ventaDTO) {
+    var venta = ventaService.create(ventaDTO);
+    return ResponseEntity
+        .created(Objects.requireNonNull(URI.create("/api/ventas/" + venta.getId()))).body(venta);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<VentaDTO> actualizar(@NonNull @PathVariable Long id,
+      @NonNull @RequestBody VentaDTO ventaDTO) {
+    return ResponseEntity.ok().body(ventaService.update(id, ventaDTO));
+  }
+
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> borrarVenta(@NonNull @PathVariable Long id) {

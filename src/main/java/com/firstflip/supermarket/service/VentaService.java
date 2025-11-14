@@ -44,8 +44,6 @@ public class VentaService implements IVentaService {
 
   @Override
   public VentaDTO create(@NonNull VentaDTO ventaDto) {
-
-
     Long idSucursal = ventaDto.getIdSucursal();
     if (idSucursal == null) {
       throw new RuntimeException("La venta debe estar asignada a una sucursal");
@@ -68,9 +66,11 @@ public class VentaService implements IVentaService {
     venta.setSucursal(sucursal);
 
     // Lista de detalles
-    List<DetalleVenta> detalle =
-        detalleVentaDto.stream().map(d -> createDetalleVenta(venta, d)).toList();
-    venta.setDetalle(detalle);
+    // List<DetalleVenta> detalle =
+    // detalleVentaDto.stream().map(d -> createDetalleVenta(venta, d)).toList();
+    // venta.setDetalle(detalle);
+    detalleVentaDto.forEach(d -> venta.getDetalle().add(createDetalleVenta(venta, d)));
+
 
     // guardar en la base de datos
     return Mapper.toDTO(ventaRepository.save(venta));
