@@ -43,11 +43,11 @@ public class Mapper {
     // var total = detalle.stream().map(DetalleVentaDTO::getSubtotal).filter(d -> d != null)
     // .map(d -> BigDecimal.valueOf(d)).reduce(BigDecimal.ZERO, BigDecimal::add).doubleValue();
 
-    @SuppressWarnings("null")
-    var total = detalle.stream().map(DetalleVentaDTO::getSubtotal).reduce(0.0, Double::sum);
+    // @SuppressWarnings("null")
+    // var total = detalle.stream().map(DetalleVentaDTO::getSubtotal).reduce(0.0, Double::sum);
 
     return VentaDTO.builder().id(v.getId()).fecha(v.getFecha()).estado(v.getEstado().name())
-        .total(total).idSucursal(v.getSucursal().getId()).detalle(detalle).build();
+        .total(v.getTotal()).idSucursal(v.getSucursal().getId()).detalle(detalle).build();
   }
 
   // Mapeo de DetalleVenta a DetalleVentaDTO
