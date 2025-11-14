@@ -1,6 +1,8 @@
 package com.firstflip.supermarket.dto;
 
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductoDTO {
 
   private Long id;
@@ -19,6 +22,6 @@ public class ProductoDTO {
 
   private Integer stock;
 
-  private Double precio;
+  private BigDecimal precio;
 
 }
