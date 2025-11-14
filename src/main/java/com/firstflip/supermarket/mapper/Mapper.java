@@ -51,7 +51,7 @@ public class Mapper {
   }
 
   // Mapeo de DetalleVenta a DetalleVentaDTO
-  private static DetalleVentaDTO toDTO(DetalleVenta d) {
+  public static DetalleVentaDTO toDTO(DetalleVenta d) {
     if (d == null) {
       return null;
     }

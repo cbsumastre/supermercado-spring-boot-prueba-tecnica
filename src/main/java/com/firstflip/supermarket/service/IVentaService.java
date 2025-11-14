@@ -1,19 +1,20 @@
 package com.firstflip.supermarket.service;
 
 import java.util.List;
+import org.springframework.lang.NonNull;
 import com.firstflip.supermarket.dto.VentaDTO;
 
 public interface IVentaService {
 
-  List<VentaDTO> findAll();
+  List<VentaDTO> getAll();
 
-  VentaDTO findById(Long id);
+  VentaDTO getById(@NonNull Long id);
 
-  VentaDTO save(VentaDTO sucursalDto);
+  VentaDTO create(@NonNull VentaDTO ventoDto);
 
-  VentaDTO update(Long id, VentaDTO sucursalDto);
+  VentaDTO update(@NonNull Long id, @NonNull VentaDTO ventoDto);
 
-  void delete(Long id);
+  void delete(@NonNull Long id);
 
 
 }
