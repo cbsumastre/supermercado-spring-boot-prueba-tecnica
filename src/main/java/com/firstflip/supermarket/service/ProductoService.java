@@ -1,43 +1,71 @@
 package com.firstflip.supermarket.service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import com.firstflip.supermarket.dto.ProductoDTO;
+import com.firstflip.supermarket.exception.NotFoundException;
+import com.firstflip.supermarket.mapper.Mapper;
+import com.firstflip.supermarket.model.CategoriaProducto;
+import com.firstflip.supermarket.model.Producto;
+import com.firstflip.supermarket.repository.ProductoRepository;
 
 @Service
 public class ProductoService implements IProductoService {
 
+  @Autowired
+  private ProductoRepository productoRepository;
+
   @Override
-  public List<ProductoDTO> findAll() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+  public List<ProductoDTO> getAll() {
+    return productoRepository.findAll().stream().map(Mapper::toDTO).toList();
   }
 
   @Override
-  public ProductoDTO findById(@NonNull Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findById'");
+  public ProductoDTO getById(@NonNull Long id) {
+    Optional<Producto> optionalProducto = productoRepository.findById(id);
+    if (optionalProducto.isPresent()) {
+      return Mapper.toDTO(optionalProducto.get());
+    }
+    return null;
   }
 
   @Override
-  public ProductoDTO save(@NonNull ProductoDTO sucursalDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'save'");
+  public ProductoDTO create(@NonNull ProductoDTO productoDto) {
+    var producto = Producto.builder().nombre(productoDto.getNombre())
+        .categoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoriaProducto()))
+        .stock(productoDto.getStock()).precio(productoDto.getPrecio()).build();
+    producto = productoRepository.save(Objects.requireNonNull(producto));
+    return Mapper.toDTO(producto);
+
   }
 
   @Override
-  public ProductoDTO update(@NonNull Long id, @NonNull ProductoDTO sucursalDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  public ProductoDTO update(@NonNull Long id, @NonNull ProductoDTO productoDto) {
+    Producto producto = productoRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
+
+
+    producto.setNombre(productoDto.getNombre());
+    producto.setCategoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoriaProducto()));
+    producto.setStock(productoDto.getStock());
+    producto.setPrecio(productoDto.getPrecio());
+
+    producto = productoRepository.save(producto);
+
+    return Mapper.toDTO(producto);
   }
 
   @Override
   public void delete(@NonNull Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    boolean existsById = productoRepository.existsById(id);
+    if (!existsById) {
+      throw new NotFoundException("Producto no encontrado");
+    }
+    productoRepository.deleteById(id);
   }
-
-
 
 }

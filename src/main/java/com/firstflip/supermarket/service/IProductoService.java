@@ -6,13 +6,13 @@ import com.firstflip.supermarket.dto.ProductoDTO;
 
 public interface IProductoService {
 
-  List<ProductoDTO> findAll();
+  List<ProductoDTO> getAll();
 
-  ProductoDTO findById(@NonNull Long id);
+  ProductoDTO getById(@NonNull Long id);
 
-  ProductoDTO save(@NonNull ProductoDTO sucursalDto);
+  ProductoDTO create(@NonNull ProductoDTO productoDto);
 
-  ProductoDTO update(@NonNull Long id, @NonNull ProductoDTO sucursalDto);
+  ProductoDTO update(@NonNull Long id, @NonNull ProductoDTO productoDto);
 
   void delete(@NonNull Long id);
 
