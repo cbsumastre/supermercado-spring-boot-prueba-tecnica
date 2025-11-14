@@ -1,5 +1,6 @@
 package com.firstflip.supermarket.model;
 
+import java.math.BigDecimal;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,7 +29,7 @@ public class Producto {
   private CategoriaProducto categoriaProducto;
 
   private Integer stock;
-  private Double precio;
+  private BigDecimal precio;
 
 
 }

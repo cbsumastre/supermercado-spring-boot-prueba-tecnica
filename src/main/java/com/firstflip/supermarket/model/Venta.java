@@ -1,5 +1,6 @@
 package com.firstflip.supermarket.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Venta {
   @Enumerated(EnumType.STRING)
   private EnumEstadoVenta estado;
 
-  private Double total;
+  private BigDecimal total;
 
   @ManyToOne
   private Sucursal sucursal;
