@@ -1,21 +1,22 @@
 package com.firstflip.supermarket.service;
 
 import java.util.List;
+import org.springframework.lang.NonNull;
 import com.firstflip.supermarket.dto.SucursalDTO;
 
 public interface ISucursalService {
 
-  List<SucursalDTO> findAll();
+  List<SucursalDTO> getAll();
 
-  SucursalDTO findById(Long id);
+  SucursalDTO getById(@NonNull Long id);
 
-  // SucursalDTO save(Sucursal sucursal);
-  // void save(SucursalDTO sucursalDTO);
+  // SucursalDTO create(Sucursal sucursal);
+  // void create(SucursalDTO sucursalDTO);
 
-  SucursalDTO save(SucursalDTO sucursalDto);
+  SucursalDTO create(@NonNull SucursalDTO sucursalDto);
 
-  SucursalDTO update(Long id, SucursalDTO sucursalDto);
+  SucursalDTO update(@NonNull Long id, @NonNull SucursalDTO sucursalDto);
 
-  void delete(Long id);
+  void delete(@NonNull Long id);
 
 }
