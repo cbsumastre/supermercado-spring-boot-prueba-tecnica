@@ -1,9 +1,9 @@
 package com.firstflip.supermarket.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,14 +37,16 @@ public class SucursalController {
 
   @PostMapping
   public ResponseEntity<SucursalDTO> registrarNuevaSucursal(@RequestBody SucursalDTO sucursalDTO) {
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(sucursalService.create(Objects.requireNonNull(sucursalDTO)));
+    SucursalDTO sucursal = sucursalService.create(Objects.requireNonNull(sucursalDTO));
+    return ResponseEntity
+        .created(Objects.requireNonNull(URI.create("/api/sucursales/" + sucursal.getId())))
+        .body(sucursal);
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<SucursalDTO> actualizarSucursalExistente(@PathVariable Long id,
       @RequestBody SucursalDTO sucursalDTO) {
-    return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+    return ResponseEntity.ok().body(
         sucursalService.update(Objects.requireNonNull(id), Objects.requireNonNull(sucursalDTO)));
   }
 
@@ -52,7 +54,7 @@ public class SucursalController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> eliminarSucursal(@PathVariable Long id) {
     sucursalService.delete(Objects.requireNonNull(id));
-    return ResponseEntity.ok().build();
+    return ResponseEntity.noContent().build();
   }
 
 
