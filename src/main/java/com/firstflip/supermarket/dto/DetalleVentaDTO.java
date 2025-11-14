@@ -1,6 +1,5 @@
 package com.firstflip.supermarket.dto;
 
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class DetalleVentaDTO {
   private Long id;
   private String nombreProducto;
   private Integer cantidadProducto;
-  private BigDecimal precio;
-  private BigDecimal subtotal;
+  private Double precio;
+  private Double subtotal;
 
 }

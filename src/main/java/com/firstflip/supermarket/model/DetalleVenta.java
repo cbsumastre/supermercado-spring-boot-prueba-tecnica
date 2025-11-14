@@ -1,6 +1,5 @@
 package com.firstflip.supermarket.model;
 
-import java.math.BigDecimal;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,6 +27,6 @@ public class DetalleVenta {
 
   private Integer cantidad;
 
-  private BigDecimal precio;
+  private Double precio;
 
 }

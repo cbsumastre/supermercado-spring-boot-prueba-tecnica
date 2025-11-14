@@ -1,6 +1,5 @@
 package com.firstflip.supermarket.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ public class VentaDTO {
   private Long id;
   private LocalDateTime fecha;
   private String estado;
-  private BigDecimal total;
+  private Double total;
 
   // datos de la sucursal
   private Long idSucursal;
