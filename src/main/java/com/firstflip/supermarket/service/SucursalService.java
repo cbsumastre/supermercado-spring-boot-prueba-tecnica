@@ -26,7 +26,7 @@ public class SucursalService implements ISucursalService {
   @Override
   public SucursalDTO getById(@NonNull Long id) {
     var sucursal = sucursalRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Sucursal no encontrada"));
+        .orElseThrow(() -> new NotFoundException("Sucursal no encontrada para id " + id));
     return Mapper.toDTO(sucursal);
   }
 
@@ -41,7 +41,7 @@ public class SucursalService implements ISucursalService {
   @Override
   public SucursalDTO update(@NonNull Long id, @NonNull SucursalDTO sucursalDto) {
     Sucursal sucursal = sucursalRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Sucursal no encontrada"));
+        .orElseThrow(() -> new NotFoundException("Sucursal no encontrada para id " + id));
 
     sucursal.setNombre(sucursalDto.getNombre());
     sucursal.setDireccion(sucursalDto.getDireccion());
@@ -54,7 +54,7 @@ public class SucursalService implements ISucursalService {
   @Override
   public void delete(@NonNull Long id) {
     if (!sucursalRepository.existsById(id)) {
-      throw new NotFoundException("Sucursal no encontrada");
+      throw new NotFoundException("Sucursal no encontrada para id " + id);
     }
     sucursalRepository.deleteById(id);
   }

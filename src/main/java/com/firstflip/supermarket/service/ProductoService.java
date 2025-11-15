@@ -30,7 +30,7 @@ public class ProductoService implements IProductoService {
     if (optionalProducto.isPresent()) {
       return Mapper.toDTO(optionalProducto.get());
     }
-    return null;
+    throw new NotFoundException("Producto no encontrado para id " + id);
   }
 
   @Override
@@ -46,7 +46,7 @@ public class ProductoService implements IProductoService {
   @Override
   public ProductoDTO update(@NonNull Long id, @NonNull ProductoDTO productoDto) {
     Producto producto = productoRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
+        .orElseThrow(() -> new NotFoundException("Producto no encontrado para " + id));
 
 
     producto.setNombre(productoDto.getNombre());
@@ -63,9 +63,15 @@ public class ProductoService implements IProductoService {
   public void delete(@NonNull Long id) {
     boolean existsById = productoRepository.existsById(id);
     if (!existsById) {
-      throw new NotFoundException("Producto no encontrado");
+      throw new NotFoundException("Producto no encontrado para id " + id);
     }
     productoRepository.deleteById(id);
+  }
+
+  public ProductoDTO findByNombre(String nombre) {
+    Producto producto = productoRepository.findByNombre(nombre)
+        .orElseThrow(() -> new NotFoundException("Producto no encontrado para nombre " + nombre));
+    return Mapper.toDTO(producto);
   }
 
 }

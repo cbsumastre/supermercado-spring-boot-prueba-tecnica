@@ -123,20 +123,4 @@ public class VentaService implements IVentaService {
     }
     ventaRepository.deleteById(id);
   }
-
-  private DetalleVenta createDetalleVenta(Venta venta, DetalleVentaDTO d) {
-    // Buscar producto
-    Producto producto = productoRepository.findByNombre(d.getNombreProducto()).orElseThrow(
-        () -> new NotFoundException("Producto " + d.getNombreProducto() + " no encontrado"));
-
-    // Crear detalle venta
-    DetalleVenta detalleVenta = new DetalleVenta();
-    detalleVenta.setId(d.getId());
-    detalleVenta.setVenta(venta);
-    detalleVenta.setProducto(producto);
-    detalleVenta.setCantidad(d.getCantidadProducto());
-    detalleVenta.setPrecio(d.getPrecio());
-    return detalleVenta;
-  }
-
 }
