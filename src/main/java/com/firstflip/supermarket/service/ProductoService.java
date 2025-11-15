@@ -68,7 +68,7 @@ public class ProductoService implements IProductoService {
     productoRepository.deleteById(id);
   }
 
-  public ProductoDTO findByNombre(String nombre) {
+  public ProductoDTO findByNombre(@NonNull String nombre) {
     Producto producto = productoRepository.findByNombre(nombre)
         .orElseThrow(() -> new NotFoundException("Producto no encontrado para nombre " + nombre));
     return Mapper.toDTO(producto);

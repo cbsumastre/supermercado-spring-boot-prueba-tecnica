@@ -1,8 +1,20 @@
 package com.firstflip.supermarket.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.lang.NonNull;
 import com.firstflip.supermarket.model.Sucursal;
 
-public interface SucursalRepository extends JpaRepository<Sucursal, Long> {
+public interface SucursalRepository {
+  List<Sucursal> findAll();
 
+  Optional<Sucursal> findById(@NonNull Long id);
+
+  boolean existsById(@NonNull Long id);
+
+  Sucursal save(@NonNull Sucursal productoDTO);
+
+  Sucursal update(@NonNull Long id, @NonNull Sucursal productoDTO);
+
+  void deleteById(@NonNull Long id);
 }

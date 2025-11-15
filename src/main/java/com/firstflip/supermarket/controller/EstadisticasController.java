@@ -3,6 +3,7 @@ package com.firstflip.supermarket.controller;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class EstadisticasController {
       Optional<String> nombreProductoMasVendido = productos.entrySet().stream()
           .max(Comparator.comparingInt(Map.Entry::getValue)).map(Map.Entry::getKey);
       if (nombreProductoMasVendido.isPresent()) {
-        ProductoDTO producto = productoService.findByNombre(nombreProductoMasVendido.get());
+        ProductoDTO producto =
+            productoService.findByNombre(Objects.requireNonNull(nombreProductoMasVendido.get()));
         return ResponseEntity.ok().body(producto);
       }
     }

@@ -71,8 +71,9 @@ public class VentaService implements IVentaService {
     // venta.setDetalle(detalle);
     detalleVentaDto.forEach(d -> {
       // Buscar producto
-      Producto producto = productoRepository.findByNombre(d.getNombreProducto()).orElseThrow(
-          () -> new NotFoundException("Producto " + d.getNombreProducto() + " no encontrado"));
+      Producto producto = productoRepository
+          .findByNombre(Objects.requireNonNull(d.getNombreProducto())).orElseThrow(
+              () -> new NotFoundException("Producto " + d.getNombreProducto() + " no encontrado"));
 
       // Crear detalle venta
       DetalleVenta detalleVenta = new DetalleVenta();
