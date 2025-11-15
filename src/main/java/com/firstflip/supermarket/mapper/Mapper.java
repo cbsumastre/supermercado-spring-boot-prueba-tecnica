@@ -18,8 +18,8 @@ public class Mapper {
     }
 
     return ProductoDTO.builder().id(p.getId()).nombre(p.getNombre())
-        .categoriaProducto(
-            p.getCategoriaProducto() != null ? p.getCategoriaProducto().name() : null)
+        .categoria(
+            p.getCategoriaProducto() != null ? p.getCategoriaProducto().getDescripcion() : null)
         .stock(p.getStock()).precio(p.getPrecio()).build();
   }
 
