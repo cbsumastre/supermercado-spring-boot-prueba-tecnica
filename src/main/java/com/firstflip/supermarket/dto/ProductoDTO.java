@@ -1,5 +1,6 @@
 package com.firstflip.supermarket.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,14 +14,19 @@ import lombok.Setter;
 @Builder
 public class ProductoDTO {
 
+  @JsonProperty(value = "id")
   private Long id;
 
+  @JsonProperty(value = "nombre")
   private String nombre;
 
-  private String categoriaProducto;
+  @JsonProperty(value = "categoria")
+  private String categoria;
 
+  @JsonProperty(value = "stock")
   private Integer stock;
 
+  @JsonProperty(value = "precio")
   private Double precio;
 
 }
