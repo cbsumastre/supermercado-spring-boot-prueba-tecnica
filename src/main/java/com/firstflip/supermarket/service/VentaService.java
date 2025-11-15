@@ -69,7 +69,22 @@ public class VentaService implements IVentaService {
     // List<DetalleVenta> detalle =
     // detalleVentaDto.stream().map(d -> createDetalleVenta(venta, d)).toList();
     // venta.setDetalle(detalle);
-    detalleVentaDto.forEach(d -> venta.getDetalle().add(createDetalleVenta(venta, d)));
+    detalleVentaDto.forEach(d -> {
+      // Buscar producto
+      Producto producto = productoRepository.findByNombre(d.getNombreProducto()).orElseThrow(
+          () -> new NotFoundException("Producto " + d.getNombreProducto() + " no encontrado"));
+
+      // Crear detalle venta
+      DetalleVenta detalleVenta = new DetalleVenta();
+      venta.getDetalle().add(detalleVenta);
+      detalleVenta.setId(d.getId());
+      detalleVenta.setVenta(venta);
+      detalleVenta.setProducto(producto);
+      detalleVenta.setCantidad(d.getCantidadProducto());
+      detalleVenta.setPrecio(d.getPrecio());
+
+
+    });
 
 
     // guardar en la base de datos
@@ -94,11 +109,6 @@ public class VentaService implements IVentaService {
           .orElseThrow(() -> new NotFoundException("Sucursal " + idSucursal + " no encontrada"));
       venta.setSucursal(sucursal);
     }
-
-    // // Lista de detalles
-    // List<DetalleVenta> detalle =
-    // ventaDto.getDetalle().stream().map(d -> createDetalleVenta(venta, d)).toList();
-    // venta.setDetalle(detalle);
 
     // guardar en la base de datos
     return Mapper.toDTO(ventaRepository.save(venta));
