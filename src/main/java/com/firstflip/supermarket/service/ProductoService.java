@@ -36,7 +36,7 @@ public class ProductoService implements IProductoService {
   @Override
   public ProductoDTO create(@NonNull ProductoDTO productoDto) {
     var producto = Producto.builder().nombre(productoDto.getNombre())
-        .categoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoriaProducto()))
+        .categoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoria()))
         .stock(productoDto.getStock()).precio(productoDto.getPrecio()).build();
     producto = productoRepository.save(Objects.requireNonNull(producto));
     return Mapper.toDTO(producto);
@@ -50,7 +50,7 @@ public class ProductoService implements IProductoService {
 
 
     producto.setNombre(productoDto.getNombre());
-    producto.setCategoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoriaProducto()));
+    producto.setCategoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoria()));
     producto.setStock(productoDto.getStock());
     producto.setPrecio(productoDto.getPrecio());
 
