@@ -48,7 +48,7 @@ public class ProductoService implements IProductoService {
     Producto producto = productoRepository.findById(id)
         .orElseThrow(() -> new NotFoundException("Producto no encontrado para " + id));
 
-
+    producto.setId(id);
     producto.setNombre(productoDto.getNombre());
     producto.setCategoriaProducto(CategoriaProducto.valueOf(productoDto.getCategoria()));
     producto.setStock(productoDto.getStock());

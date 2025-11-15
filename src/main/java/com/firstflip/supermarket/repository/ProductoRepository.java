@@ -17,8 +17,6 @@ public interface ProductoRepository {
 
   Producto save(@NonNull Producto productoDTO);
 
-  Producto update(@NonNull Long id, @NonNull Producto productoDTO);
-
   void deleteById(@NonNull Long id);
 
 }

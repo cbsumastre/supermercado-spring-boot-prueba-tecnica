@@ -14,7 +14,5 @@ public interface SucursalRepository {
 
   Sucursal save(@NonNull Sucursal productoDTO);
 
-  Sucursal update(@NonNull Long id, @NonNull Sucursal productoDTO);
-
   void deleteById(@NonNull Long id);
 }

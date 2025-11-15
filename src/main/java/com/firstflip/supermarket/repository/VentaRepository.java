@@ -15,7 +15,5 @@ public interface VentaRepository {
 
   Venta save(@NonNull Venta venta);
 
-  Venta update(@NonNull Long id, @NonNull Venta venta);
-
   void deleteById(@NonNull Long id);
 }
