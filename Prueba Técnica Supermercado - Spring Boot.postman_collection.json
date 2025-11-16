@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "1a434b3e-8582-41d1-8400-5f791d5854cf",
+		"name": "Prueba Técnica Supermercado - Spring Boot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": ""
+	},
+	"item": [
+		{
+			"name": "Producto",
+			"item": [
+				{
+					"name": "[GET] All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/productos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST] Producto - Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mi Nuevo producto Chispas\",\n    \"categoria\": \"ELECTRONICA_TECNOLOGIA\",\n    \"stock\": 120,\n    \"precio\": 250.99\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/productos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/productos/101",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productos",
+								"101"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[PUT] Producto - Update Stock",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mi Nuevo producto Chispas\",\n    \"categoria\": \"ELECTRONICA_TECNOLOGIA\",\n    \"stock\": 1190,\n    \"precio\": 250.99\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/productos/101",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productos",
+								"101"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DELETE] Producto - Delete By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/productos/101",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productos",
+								"101"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sucursal",
+			"item": [
+				{
+					"name": "[GET] All Sucursales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/sucursales",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"sucursales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST] Sucursal - Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Nueva Sucursal\",\n    \"direccion\": \"Rua 13 del Percebe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/sucursales",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"sucursales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] Sucursal By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/sucursales/11",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"sucursales",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[PUT] Sucursal - Update Dirección",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 11,\n    \"nombre\": \"Nueva Sucursal\",\n    \"direccion\": \"Rue 13 del Percebe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/sucursales/11",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"sucursales",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DELETE] Sucursal - Delete By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/sucursales/11",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"sucursales",
+								"11"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Venta",
+			"item": [
+				{
+					"name": "[GET] All Venta",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/ventas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] Venta Filter sucursalId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/ventas?sucursalId=1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas"
+							],
+							"query": [
+								{
+									"key": "sucursalId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] Venta Filter fecha",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/ventas?fecha=2025-09-09",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas"
+							],
+							"query": [
+								{
+									"key": "fecha",
+									"value": "2025-09-09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] Venta Filter idSucursal and fecha",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/ventas?sucursalId=10&fecha=2025-09-09",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas"
+							],
+							"query": [
+								{
+									"key": "sucursalId",
+									"value": "10"
+								},
+								{
+									"key": "fecha",
+									"value": "2025-09-09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[POST] Venta - Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n        \"fecha\": \"2025-11-14T18:45:00\",\n        \"estado\": \"COMPLETADA\",\n        \"total\": 1741.49,\n        \"sucursal_id\": 1,\n        \"detalle\": [\n            {\n                \"nombre_producto\": \"Cámara Mirrorless 24MP\",\n                \"cantidad_producto\": 2,\n                \"precio\": 850.75,\n                \"subtotal\": 1701.5\n            },\n            {\n                \"nombre_producto\": \"Mochila de Senderismo 40L\",\n                \"cantidad_producto\": 1,\n                \"precio\": 39.99,\n                \"subtotal\": 39.99\n            }\n        ]\n    },",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/ventas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[GET] Venta By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/ventas/213",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas",
+								"213"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[PUT] Sucursal - Update Venta",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 213,\n    \"fecha\": \"2025-11-14T18:45:00\",\n    \"estado\": \"COMPLETADA\",\n    \"total\": 1741.49,\n    \"sucursal_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/ventas/213",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas",
+								"213"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DELETE] Venta - Delete By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/ventas/213",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"ventas",
+								"213"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estadísticas",
+			"item": [
+				{
+					"name": "[GET] Producto más pedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/estadisticas/producto-mas-vendido",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"estadisticas",
+								"producto-mas-vendido"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
