@@ -12,7 +12,7 @@ public interface SucursalRepository {
 
   boolean existsById(@NonNull Long id);
 
-  Sucursal save(@NonNull Sucursal productoDTO);
+  Sucursal save(@NonNull Sucursal sucursalDTO);
 
   void deleteById(@NonNull Long id);
 }

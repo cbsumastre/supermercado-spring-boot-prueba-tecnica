@@ -43,6 +43,7 @@ public class SucursalService implements ISucursalService {
     Sucursal sucursal = sucursalRepository.findById(id)
         .orElseThrow(() -> new NotFoundException("Sucursal no encontrada para id " + id));
 
+    sucursal.setId(id);
     sucursal.setNombre(sucursalDto.getNombre());
     sucursal.setDireccion(sucursalDto.getDireccion());
 
