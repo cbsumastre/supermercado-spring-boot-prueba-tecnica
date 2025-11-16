@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.firstflip.supermarket.dto.DetalleVentaDTO;
 import com.firstflip.supermarket.dto.VentaDTO;
 import com.firstflip.supermarket.exception.NotFoundException;
@@ -30,11 +31,13 @@ public class VentaService implements IVentaService {
   @Autowired
   private SucursalRepository sucursalRepository;
 
+  @Transactional(readOnly = true)
   @Override
   public List<VentaDTO> getAll() {
     return ventaRepository.findAll().stream().map(Mapper::toDTO).toList();
   }
 
+  @Transactional(readOnly = true)
   @Override
   public VentaDTO getById(@NonNull Long id) {
     Venta venta = ventaRepository.findById(id)
@@ -42,6 +45,7 @@ public class VentaService implements IVentaService {
     return Mapper.toDTO(venta);
   }
 
+  @Transactional
   @Override
   public VentaDTO create(@NonNull VentaDTO ventaDto) {
     Long idSucursal = ventaDto.getIdSucursal();
@@ -93,6 +97,7 @@ public class VentaService implements IVentaService {
 
   }
 
+  @Transactional
   @Override
   public VentaDTO update(@NonNull Long id, @NonNull VentaDTO ventaDto) {
     Venta venta = ventaRepository.findById(id)
@@ -116,6 +121,7 @@ public class VentaService implements IVentaService {
 
   }
 
+  @Transactional
   @Override
   public void delete(@NonNull Long id) {
     boolean existsById = ventaRepository.existsById(id);

@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.firstflip.supermarket.dto.SucursalDTO;
 import com.firstflip.supermarket.exception.NotFoundException;
 import com.firstflip.supermarket.mapper.Mapper;
@@ -17,12 +18,13 @@ public class SucursalService implements ISucursalService {
   @Autowired
   private SucursalRepository sucursalRepository;
 
-
+  @Transactional(readOnly = true)
   @Override
   public List<SucursalDTO> getAll() {
     return sucursalRepository.findAll().stream().map(Mapper::toDTO).toList();
   }
 
+  @Transactional(readOnly = true)
   @Override
   public SucursalDTO getById(@NonNull Long id) {
     var sucursal = sucursalRepository.findById(id)
@@ -30,6 +32,7 @@ public class SucursalService implements ISucursalService {
     return Mapper.toDTO(sucursal);
   }
 
+  @Transactional
   @Override
   public SucursalDTO create(@NonNull SucursalDTO sucursalDto) {
     var sucursal = Sucursal.builder().nombre(sucursalDto.getNombre())
@@ -38,6 +41,7 @@ public class SucursalService implements ISucursalService {
     return Mapper.toDTO(sucursal);
   }
 
+  @Transactional
   @Override
   public SucursalDTO update(@NonNull Long id, @NonNull SucursalDTO sucursalDto) {
     Sucursal sucursal = sucursalRepository.findById(id)
@@ -52,6 +56,7 @@ public class SucursalService implements ISucursalService {
     return Mapper.toDTO(sucursal);
   }
 
+  @Transactional
   @Override
   public void delete(@NonNull Long id) {
     if (!sucursalRepository.existsById(id)) {

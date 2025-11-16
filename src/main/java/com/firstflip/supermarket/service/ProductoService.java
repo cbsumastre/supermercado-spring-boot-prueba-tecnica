@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.firstflip.supermarket.dto.ProductoDTO;
 import com.firstflip.supermarket.exception.NotFoundException;
 import com.firstflip.supermarket.mapper.Mapper;
@@ -19,11 +20,13 @@ public class ProductoService implements IProductoService {
   @Autowired
   private ProductoRepository productoRepository;
 
+  @Transactional(readOnly = true)
   @Override
   public List<ProductoDTO> getAll() {
     return productoRepository.findAll().stream().map(Mapper::toDTO).toList();
   }
 
+  @Transactional(readOnly = true)
   @Override
   public ProductoDTO getById(@NonNull Long id) {
     Optional<Producto> optionalProducto = productoRepository.findById(id);
@@ -33,6 +36,7 @@ public class ProductoService implements IProductoService {
     throw new NotFoundException("Producto no encontrado para id " + id);
   }
 
+  @Transactional
   @Override
   public ProductoDTO create(@NonNull ProductoDTO productoDto) {
     var producto = Producto.builder().nombre(productoDto.getNombre())
@@ -43,6 +47,7 @@ public class ProductoService implements IProductoService {
 
   }
 
+  @Transactional
   @Override
   public ProductoDTO update(@NonNull Long id, @NonNull ProductoDTO productoDto) {
     Producto producto = productoRepository.findById(id)
@@ -59,6 +64,7 @@ public class ProductoService implements IProductoService {
     return Mapper.toDTO(producto);
   }
 
+  @Transactional
   @Override
   public void delete(@NonNull Long id) {
     boolean existsById = productoRepository.existsById(id);
