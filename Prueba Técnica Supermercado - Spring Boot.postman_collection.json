@@ -485,7 +485,7 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "",
+			"value": "http://localhost:9091",
 			"type": "default"
 		}
 	]
