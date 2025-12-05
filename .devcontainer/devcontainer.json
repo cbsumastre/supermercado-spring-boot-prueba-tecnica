@@ -7,6 +7,14 @@
 	"runArgs": [
 		"--net=host"
 	],
+	"remoteEnv": {
+		"DB_URL": "jdbc:h2:mem:supermarketdb;MODE=LEGACY;DB_CLOSE_DELAY=1;",
+		"DB_USER_NAME": "supermarket",
+		"DB_PASSWORD": "my_super_secret_password",
+		"DB_PLATFORM": "org.hibernate.dialect.H2Dialect",
+		"DB_DRIVER": "org.h2.Driver",
+		"SPRING_H2_CONSOLE_ENABLED": "true"
+	},
 	"customizations": {
 		"vscode": {
 			"settings": {

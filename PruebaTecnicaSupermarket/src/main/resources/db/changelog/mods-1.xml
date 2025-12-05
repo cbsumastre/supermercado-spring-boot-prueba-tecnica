@@ -6,7 +6,7 @@
   <changeSet id="1" author="cbsumastre">
     <createTable tableName="SUCURSAL">
       <column name="id" type="IDENTITY">
-        <constraints primaryKey="true"/>
+        <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="nombre" type="VARCHAR(200)">
         <constraints nullable="false"/>
@@ -24,7 +24,7 @@
   <changeSet id="2" author="cbsumastre">
     <createTable tableName="CATEGORIA">
       <column name="id" type="VARCHAR(200)">
-        <constraints primaryKey="true"/>
+        <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="descripcion" type="VARCHAR(200)">
         <constraints nullable="false"/>
@@ -87,7 +87,7 @@
   <changeSet id="5" author="cbsumastre">
     <createTable tableName="DETALLE_VENTA">
       <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
+        <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="venta_id" type="BIGINT">
         <constraints nullable="false"/>

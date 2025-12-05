@@ -1,0 +1,33 @@
+services:
+  supermarket: # nombre de la app establecida en application.properties
+    build: PruebaTecnicaSupermarket #nombre de la carpeta donde está el Dockerfile
+    container_name: supermarket
+    mem_limit: 512m
+    ports:
+      - "9092:9091"
+    environment:
+      DB_URL: jdbc:mysql://supermarket-db:3306/supermarket-db?createDatabaseIfNotExists=true&serverTimezone=Europe/Madrid
+      DB_USER_NAME: "root"
+      DB_PASSWORD: "1234"
+      DB_PLATFORM: "org.hibernate.dialect.MySQL8Dialect"
+      DB_DRIVER: "com.mysql.cj.jdbc.Driver"
+      SPRING_H2_CONSOLE_ENABLED: "false"
+    restart: always
+    depends_on:
+      supermarket-db:
+        condition: service_healthy
+
+  supermarket-db:
+    image: mysql:9.4.0
+    container_name: supermarket-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: supermarket-db
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
