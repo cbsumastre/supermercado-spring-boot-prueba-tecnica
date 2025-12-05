@@ -44,8 +44,7 @@
 	"remoteUser": "vscode",
 	"mounts": [
 		"source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-		"source=${localEnv:HOME}/.m2,target=/home/vscode/.m2,type=bind",
-		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+		"source=${localEnv:HOME}/.m2,target=/home/vscode/.m2,type=bind"
 	],
 	"workspaceFolder": "/workspace",
 	"postCreateCommand": "bash ./.devcontainer/scripts/post-create-command.sh",
