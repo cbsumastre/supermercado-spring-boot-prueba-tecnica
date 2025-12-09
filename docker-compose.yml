@@ -12,10 +12,30 @@ services:
       DB_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"
       DB_DRIVER: "org.postgresql.Driver"
       SPRING_H2_CONSOLE_ENABLED: "false"
+      SPRING_PROFILES_ACTIVE: prod
     restart: always
     depends_on:
       postgres-db:
         condition: service_healthy
+    healthcheck:
+      # Comando para chequear el endpoint de Actuator
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9091/health",
+        ]
+      # Espera 45 segundos para que Spring Boot arranque antes de chequear
+      start_period: 45s
+      # Intervalo entre chequeos de salud
+      interval: 15s
+      # Tiempo máximo que espera el chequeo
+      timeout: 5s
+      # Número de fallos antes de considerarse 'unhealthy'
+      retries: 3
 
   postgres-db:
     image: postgres:16
