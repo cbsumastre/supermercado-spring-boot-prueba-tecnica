@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.firstflip.supermarket.dto.VentaDTO;
+import com.firstflip.supermarket.service.SucursalService;
 import com.firstflip.supermarket.service.VentaService;
 
 
@@ -28,12 +29,16 @@ public class VentaController {
   @Autowired
   private VentaService ventaService;
 
+  @Autowired
+  private SucursalService sucursalService;
+
   @GetMapping
   public ResponseEntity<List<VentaDTO>> obtenerVentasConFiltros(
       @RequestParam(name = "sucursalId", required = false) Long sucursalId,
       @RequestParam(name = "fecha", required = false) LocalDate fecha) {
     List<VentaDTO> ventas = ventaService.getAll();
     if (sucursalId != null) {
+      sucursalService.getById(sucursalId);
       ventas = ventas.stream().filter(v -> v.getIdSucursal().equals(sucursalId)).toList();
     }
     if (fecha != null) {
