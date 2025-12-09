@@ -1,5 +1,5 @@
 # --- FASE 1: BUILDER (Compilación de Código y Dependencias) 🏗️ ---
-FROM maven:3.9.11-amazoncorretto-25-debian-trixie AS builder
+FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
