@@ -28,6 +28,13 @@ FROM eclipse-temurin:21-jre-ubi9-minimal AS runner
 # Establece el directorio de trabajo
 WORKDIR /app
 
+# 🎯 OPTIMIZACIÓN DE MEMORIA DEL CONTENEDOR (Junto con las optimizaciones JVM existentes)
+# Spring Boot >= 2.x usa estas variables para limitar el HEAP size
+# basado en los límites de memoria del contenedor (cgroups).
+# Se recomienda establecer los límites de memoria del contenedor en docker-compose.yml (ej: memory: 512m).
+ENV JAVA_TOOL_OPTIONS="-XX:TieredStopAtLevel=1 -Duser.timezone=Europe/Madrid -Djava.security.egd=file:/dev/./urandom"
+ENV JAVA_OPTS="-XX:MinRAMPercentage=50.0 -XX:MaxRAMPercentage=80.0"
+
 # Copia el JAR generado de la fase builder
 ARG JAR_FILE=target/*.jar
 COPY --from=builder /app/${JAR_FILE} app_prueba_tecnica_super.jar
@@ -35,5 +42,5 @@ COPY --from=builder /app/${JAR_FILE} app_prueba_tecnica_super.jar
 # Puerto que expone la aplicación
 EXPOSE 9091
 
-ENTRYPOINT ["java","-Duser.timezone=Europe/Madrid","-jar", "-XX:TieredStopAtLevel=1", "-Djava.security.egd=file:/dev/./urandom", "app_prueba_tecnica_super.jar"]
+ENTRYPOINT ["java","$JAVA_TOOL_OPTIONS", "$JAVA_OPTS", "-jar", "app_prueba_tecnica_super.jar"]
 
