@@ -1,43 +1,51 @@
-# --- FASE 1: BUILDER (Compilación y Tests) ---
+# --- FASE 1: BUILDER (Compilación de Código y Dependencias) 🏗️ ---
 FROM maven:3.9.11-amazoncorretto-25-debian-trixie AS builder
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
 # Copia los archivos de configuración de Maven (pom.xml)
-# Se hace por separado para aprovechar el cache de Docker si solo cambian las dependencias
 COPY pom.xml .
 
-# Descarga todas las dependencias para que el paso de copia de código fuente
-# y el resto de la compilación se beneficien del cache si solo cambia el código.
+# Descarga todas las dependencias para cachearlas
 RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B
 
 # Copia el código fuente del proyecto
 COPY src ./src
 
-# Empaqueta la aplicación, incluyendo la ejecución de tests.
-# El mount=type=cache asegura que el repositorio local de Maven (m2) se cachee
-# entre builds para acelerar las compilaciones.
+# Solo compila.
+RUN --mount=type=cache,target=/root/.m2 mvn compile
+
+# --- FASE 2: TESTER (Ejecución de Tests) ✅ ---
+FROM builder AS tester
+
+# Ejecuta los tests unitarios y de integración. Si fallan, el build se detiene aquí.
+# Esta fase tiene una única responsabilidad: validar el código.
+RUN --mount=type=cache,target=/root/.m2 mvn test
+
+# --- FASE 3: PACKAGER (Creación del JAR) 📦 ---
+# Esta fase hereda la imagen de 'tester' (que incluye el código validado)
+FROM tester AS packager
+
+# Empaquetado final (genera el JAR). 
+# Se utiliza -DskipTests=true para evitar re-ejecutar los tests.
 RUN --mount=type=cache,target=/root/.m2 mvn package -DskipTests=true
 
 # El JAR resultante estará en target/nombre_del_jar.jar
 
-# --- FASE 2: RUNNER (Ejecución final) ---
+# --- FASE 4: RUNNER (Ejecución final) 🏃 ---
 FROM eclipse-temurin:21-jre-ubi9-minimal AS runner
 
 # Establece el directorio de trabajo
 WORKDIR /app
 
 # 🎯 OPTIMIZACIÓN DE MEMORIA DEL CONTENEDOR (Junto con las optimizaciones JVM existentes)
-# Spring Boot >= 2.x usa estas variables para limitar el HEAP size
-# basado en los límites de memoria del contenedor (cgroups).
-# Se recomienda establecer los límites de memoria del contenedor en docker-compose.yml (ej: memory: 512m).
 ENV JAVA_TOOL_OPTIONS="-XX:TieredStopAtLevel=1 -Duser.timezone=Europe/Madrid -Djava.security.egd=file:/dev/./urandom"
 ENV JAVA_OPTS="-XX:MinRAMPercentage=50.0 -XX:MaxRAMPercentage=80.0"
 
-# Copia el JAR generado de la fase builder
+# Copia el JAR generado de la fase packager
 ARG JAR_FILE=target/*.jar
-COPY --from=builder /app/${JAR_FILE} app_prueba_tecnica_super.jar
+COPY --from=packager /app/${JAR_FILE} app_prueba_tecnica_super.jar
 
 # Puerto que expone la aplicación
 EXPOSE 9091

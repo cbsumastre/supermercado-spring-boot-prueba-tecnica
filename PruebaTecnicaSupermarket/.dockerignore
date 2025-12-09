@@ -13,6 +13,7 @@ build/
 .settings/
 .classpath
 .project
+*.iml
 
 # Ignora el código fuente y artefactos de Maven/Gradle que no son necesarios
 # (Las dependencias se manejan en la fase 'builder' y 'layers')
@@ -34,3 +35,8 @@ npm-debug.log*
 # Ignora el archivo .dockerignore y el Dockerfile para evitar ambigüedades
 Dockerfile
 .dockerignore
+
+
+# Excluir código de tests y otros archivos innecesarios para el build
+src/test/
+

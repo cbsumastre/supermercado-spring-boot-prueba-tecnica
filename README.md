@@ -105,27 +105,34 @@ Las ventas NO SE PUEDEN MODIFICAR sin permisos de superusuario (no es necesario 
    - Path: **/api/estadisticas/producto-mas-vendido**
    - Descripción: Calcular el producto más vendido utilizando Java Streams.
   
-# 🚢 Dockerfile para Aplicación Spring Boot (Build de Dos Etapas)
+# 🚢 Dockerfile para Aplicación Spring Boot (Build de Cuatro Etapas)
 
-Este `Dockerfile` implementa un **build multi-stage** (de múltiples etapas) para generar una imagen Docker eficiente y de tamaño reducido para una aplicación Java/Spring Boot empaquetada con Maven.
+Este `Dockerfile` implementa un **build multi-stage** (de múltiples etapas) con una estricta **separación de responsabilidades** por fase, optimizando el cache y la lógica de validación.
 
 ---
 
 ## 🚀 Explicación de las Optimizaciones y Fases
 
-Se utilizan dos fases clave para separar el entorno de compilación del entorno de ejecución, resultando en una imagen final más pequeña y segura.
+Se utilizan **cuatro fases** clave para garantizar la eficiencia, validación y un tamaño final mínimo.
 
-### 1. Fases del Build (Multi-stage Build)
+### 1. Fases del Build (Multi-stage Build) 
 
-- **`builder` (Fase 1: Compilación) 🛠️**
-  * **Imagen Base:** Utiliza una imagen completa de **Maven y JDK** (`maven:3.9.11-amazoncorretto-25-debian-trixie`) ya que es necesaria para compilar el código fuente y empaquetar la aplicación.
-  * **Cache de Dependencias:** Al copiar **solo `pom.xml` primero** y ejecutar `mvn dependency:go-offline -B`, se crea una capa de dependencias de Maven. Si estas no cambian, Docker reutiliza esta capa, acelerando drásticamente el proceso de build en subsecuentes ejecuciones.
-  * **Cache de Maven Local (`.m2`):** El uso de `--mount=type=cache,target=/root/.m2` asegura que el repositorio local de Maven (`m2`) se cachee **entre builds**, no solo entre pasos del mismo build, para evitar descargar artefactos repetidamente.
-  * **Salto de Tests:** La compilación final se ejecuta con `mvn package -DskipTests=true`, lo que **omite la ejecución de los tests** unitarios y de integración.
+- **`builder` (Fase 1: Compilación de Código y Dependencias) 🏗️**
+  * **Responsabilidad:** Gestión de dependencias y compilación inicial del código (`mvn compile`).
+  * **Cache:** Los pasos de `dependency:go-offline` aseguran que la capa de dependencias de Maven se cachee eficientemente. Si el código fuente cambia, solo se reconstruyen los pasos siguientes, no la descarga de dependencias.
 
-- **`runner` (Fase 2: Ejecución Final) 🏃**
-  * **Imagen Base Minimizada:** Utiliza una imagen base con solo el **JRE** (Java Runtime Environment) (`eclipse-temurin:21-jre-ubi9-minimal`). Esto elimina el compilador (JDK) y otras herramientas innecesarias, cumpliendo con el principio de **Least Privilege** y reduciendo drásticamente el tamaño final de la imagen.
-  * **Transferencia del Artefacto:** Solo se copia el JAR ejecutable final (el resultado de `target/*.jar`) desde la fase `builder` a la fase `runner`, asegurando que el contenedor final solo contenga el mínimo necesario para ejecutar la aplicación.
+- **`tester` (Fase 2: Ejecución de Tests) ✅**
+  * **Responsabilidad Única:** **Validación del código**. Ejecuta `mvn test`. Si algún test falla, el proceso de `docker build` se detiene inmediatamente.
+  * **Optimización del Cache:** Al aislar `mvn test` de `mvn package`, Docker puede cachear este paso de manera independiente.
+
+- **`packager` (Fase 3: Creación del JAR) 📦**
+  * **Responsabilidad Única:** **Generación del artefacto final**. Esta fase se ejecuta *solo si* la fase `tester` ha pasado.
+  * **Optimización:** Utiliza `mvn package -DskipTests=true` para evitar la costosa re-ejecución de los tests que ya han sido validados en la fase anterior.
+
+- **`runner` (Fase 4: Ejecución Final Optimizada) 🏃**
+  * **Imagen Base Minimizada:** Utiliza solo el **JRE** (`eclipse-temurin:21-jre-ubi9-minimal`), resultando en la imagen de producción más pequeña y segura posible.
+  * **Transferencia:** Solo copia el JAR ejecutable final desde la fase `packager`.
+  * **Optimización JVM:** Ver la sección siguiente.
 
 ---
 
@@ -135,10 +142,10 @@ Se utilizan variables de entorno para optimizar el arranque y el consumo de recu
 
 | Variable | Configuración | Propósito |
 | :--- | :--- | :--- |
-| **`XX:TieredStopAtLevel=1`** | `JAVA_TOOL_OPTIONS` | Le indica a la **JVM** que use solo el primer nivel de optimización del compilador JIT (Just-In-Time). Esto **reduce el tiempo de arranque** (*cold start*) de la aplicación. |
-| **`Djava.security.egd=file:/dev/./urandom`** | `JAVA_TOOL_OPTIONS` | Acelera la generación de números aleatorios (necesarios para sesiones, seguridad, etc.). |
+| **`XX:TieredStopAtLevel=1`** | `JAVA_TOOL_OPTIONS` | Le indica a la **JVM** que use solo el primer nivel de optimización del compilador JIT (Just-In-Time). Esto **reduce el tiempo de arranque** (*cold start*). |
+| **`Djava.security.egd=file:/dev/./urandom`** | `JAVA_TOOL_OPTIONS` | Acelera la generación de números aleatorios. |
 | **`Duser.timezone=Europe/Madrid`** | `JAVA_TOOL_OPTIONS` | Establece la zona horaria por defecto. |
 | **`MinRAMPercentage=50.0`** | `JAVA_OPTS` | El tamaño inicial del Heap debe ser el 50% de la memoria total asignada al contenedor. |
-| **`MaxRAMPercentage=80.0`** | `JAVA_OPTS` | El tamaño máximo del Heap debe ser el 80% de la memoria total del contenedor. Esto es crucial para que la JVM respete los **límites de memoria del contenedor (cgroups)**. |
+| **`MaxRAMPercentage=80.0`** | `JAVA_OPTS` | El tamaño máximo del Heap debe ser el 80% de la memoria total del contenedor, respetando los **límites de memoria del contenedor (cgroups)**. |
 
 > **Nota:** Para que las optimizaciones de `MinRAMPercentage` y `MaxRAMPercentage` sean efectivas, es **obligatorio** establecer límites de memoria explícitos para el contenedor (ej: `memory: 512m`) en el orquestador (Docker Compose, Kubernetes, etc.).
