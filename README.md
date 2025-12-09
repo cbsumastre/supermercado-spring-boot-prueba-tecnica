@@ -105,32 +105,40 @@ Las ventas NO SE PUEDEN MODIFICAR sin permisos de superusuario (no es necesario 
    - Path: **/api/estadisticas/producto-mas-vendido**
    - Descripción: Calcular el producto más vendido utilizando Java Streams.
   
+# 🚢 Dockerfile para Aplicación Spring Boot (Build de Dos Etapas)
 
-# [🚢 Dockerizar Prueba Técnica Spring Boot](https://www.youtube.com/watch?v=aaTWiVD8mro)
+Este `Dockerfile` implementa un **build multi-stage** (de múltiples etapas) para generar una imagen Docker eficiente y de tamaño reducido para una aplicación Java/Spring Boot empaquetada con Maven.
+
+---
 
 ## 🚀 Explicación de las Optimizaciones y Fases
 
+Se utilizan dos fases clave para separar el entorno de compilación del entorno de ejecución, resultando en una imagen final más pequeña y segura.
+
 ### 1. Fases del Build (Multi-stage Build)
 
-- `builder` **(Fase 1)**: Usa la imagen JDK completa (`...-jdk-...`) porque es necesaria para compilar y ejecutar los tests con Maven.
+- **`builder` (Fase 1: Compilación) 🛠️**
+  * **Imagen Base:** Utiliza una imagen completa de **Maven y JDK** (`maven:3.9.11-amazoncorretto-25-debian-trixie`) ya que es necesaria para compilar el código fuente y empaquetar la aplicación.
+  * **Cache de Dependencias:** Al copiar **solo `pom.xml` primero** y ejecutar `mvn dependency:go-offline -B`, se crea una capa de dependencias de Maven. Si estas no cambian, Docker reutiliza esta capa, acelerando drásticamente el proceso de build en subsecuentes ejecuciones.
+  * **Cache de Maven Local (`.m2`):** El uso de `--mount=type=cache,target=/root/.m2` asegura que el repositorio local de Maven (`m2`) se cachee **entre builds**, no solo entre pasos del mismo build, para evitar descargar artefactos repetidamente.
+  * **Salto de Tests:** La compilación final se ejecuta con `mvn package -DskipTests=true`, lo que **omite la ejecución de los tests** unitarios y de integración.
 
-  - **Cache de dependencias**: Copiar `pom.xml` y ejecutar `mvn dependency:go-offline` por separado asegura que si solo cambias el código de tu aplicación, Docker no tiene que descargar todas las dependencias de Maven de nuevo.
+- **`runner` (Fase 2: Ejecución Final) 🏃**
+  * **Imagen Base Minimizada:** Utiliza una imagen base con solo el **JRE** (Java Runtime Environment) (`eclipse-temurin:21-jre-ubi9-minimal`). Esto elimina el compilador (JDK) y otras herramientas innecesarias, cumpliendo con el principio de **Least Privilege** y reduciendo drásticamente el tamaño final de la imagen.
+  * **Transferencia del Artefacto:** Solo se copia el JAR ejecutable final (el resultado de `target/*.jar`) desde la fase `builder` a la fase `runner`, asegurando que el contenedor final solo contenga el mínimo necesario para ejecutar la aplicación.
 
-  - **Tests**: Al ejecutar `mvn package -DskipTests=false`, te aseguras de que la suite de tests unitarios y de integración se ejecute antes de generar el JAR final. Si fallan, el *build* fallará.
+---
 
-- `layers` **(Fase 2)**: Esta es la clave de la optimización de Spring Boot.
+### 2. Comandos de Optimización de Java y Memoria
 
-  - Usa java `-Djarmode=layertools -jar app.jar extract` para descomponer el JAR ejecutable de Spring Boot en capas lógicas: `dependencies`, `spring-boot-loader`, `snapshot-dependencies`, y `application`.
+Se utilizan variables de entorno para optimizar el arranque y el consumo de recursos de la JVM dentro del entorno de contenedor (cgroups).
 
-- *`runner` **(Fase 3)**: Es la imagen de producción final y más pequeña.
+| Variable | Configuración | Propósito |
+| :--- | :--- | :--- |
+| **`XX:TieredStopAtLevel=1`** | `JAVA_TOOL_OPTIONS` | Le indica a la **JVM** que use solo el primer nivel de optimización del compilador JIT (Just-In-Time). Esto **reduce el tiempo de arranque** (*cold start*) de la aplicación. |
+| **`Djava.security.egd=file:/dev/./urandom`** | `JAVA_TOOL_OPTIONS` | Acelera la generación de números aleatorios (necesarios para sesiones, seguridad, etc.). |
+| **`Duser.timezone=Europe/Madrid`** | `JAVA_TOOL_OPTIONS` | Establece la zona horaria por defecto. |
+| **`MinRAMPercentage=50.0`** | `JAVA_OPTS` | El tamaño inicial del Heap debe ser el 50% de la memoria total asignada al contenedor. |
+| **`MaxRAMPercentage=80.0`** | `JAVA_OPTS` | El tamaño máximo del Heap debe ser el 80% de la memoria total del contenedor. Esto es crucial para que la JVM respete los **límites de memoria del contenedor (cgroups)**. |
 
-  - Usa la imagen **JRE** (`...-jre-...`) sin el compilador, lo que reduce drásticamente el tamaño final del contenedor (Principio de **Least Privilege**).
-
-  - **Cache de Capas**: Copiar las capas de Spring Boot en el **orden específico** (`dependencies` primero) aprovecha al máximo el **cache de capas de Docker**. Si solo cambias el código de la aplicación (la capa `application`), solo esa capa debe ser reconstruida, no todas las dependencias.
-
-### 2. Comandos de Optimización de Java
-- `XX:TieredStopAtLevel=1`: Le dice a la **JVM** que compile el código JIT (Just-In-Time) con solo el primer nivel de optimización. Esto reduce el tiempo de **arranque** del *cold start* de Spring Boot a expensas de la máxima optimización a largo plazo, lo cual es ideal para contenedores que se escalan y se reinician con frecuencia.
-
-- `Djava.security.egd=file:/dev/./urandom`: Mejora el rendimiento al acelerar la generación de números aleatorios (importante para sesiones, seguridad, etc.) que a menudo es un cuello de botella en entornos virtuales.
-
-- `Duser.timezone=UTC`: Establece la zona horaria en UTC, lo cual es una buena práctica en contenedores para evitar problemas de localización y asegurar la uniformidad en los logs.
+> **Nota:** Para que las optimizaciones de `MinRAMPercentage` y `MaxRAMPercentage` sean efectivas, es **obligatorio** establecer límites de memoria explícitos para el contenedor (ej: `memory: 512m`) en el orquestador (Docker Compose, Kubernetes, etc.).
