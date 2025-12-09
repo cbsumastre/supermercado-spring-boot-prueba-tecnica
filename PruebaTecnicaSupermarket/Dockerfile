@@ -42,5 +42,6 @@ COPY --from=builder /app/${JAR_FILE} app_prueba_tecnica_super.jar
 # Puerto que expone la aplicación
 EXPOSE 9091
 
-ENTRYPOINT ["java","$JAVA_TOOL_OPTIONS", "$JAVA_OPTS", "-jar", "app_prueba_tecnica_super.jar"]
+ENTRYPOINT java $JAVA_TOOL_OPTIONS $JAVA_OPTS -jar app_prueba_tecnica_super.jar
+#ENTRYPOINT ["/bin/sh", "-c", "java $JAVA_TOOL_OPTIONS $JAVA_OPTS -jar app_prueba_tecnica_super.jar"]
 
