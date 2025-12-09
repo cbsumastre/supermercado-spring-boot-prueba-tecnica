@@ -1,0 +1,36 @@
+### .dockerignore ###
+
+# Ignora los directorios de compilación y empaquetado
+target/
+build/
+*.jar
+*.war
+*.zip
+
+# Ignora los directorios específicos del IDE (IntelliJ, VS Code, Eclipse)
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+
+# Ignora el código fuente y artefactos de Maven/Gradle que no son necesarios
+# (Las dependencias se manejan en la fase 'builder' y 'layers')
+.mvn/
+.gradle/
+**/src/main/resources/static/
+**/src/main/resources/public/
+
+# Ignora los directorios de control de versiones
+.git
+.gitignore
+
+# Ignora los logs y archivos temporales
+logs/
+tmp/
+*.log
+npm-debug.log*
+
+# Ignora el archivo .dockerignore y el Dockerfile para evitar ambigüedades
+Dockerfile
+.dockerignore

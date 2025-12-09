@@ -6,7 +6,7 @@ services:
     ports:
       - "9092:9091"
     environment:
-      DB_URL: jdbc:postgresql://postgres-db:5432/supermarket_db
+      DB_URL: jdbc:postgresql://postgres-db/supermarket_db
       DB_USER_NAME: "supermarket_user"
       DB_PASSWORD: "1234"
       DB_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"

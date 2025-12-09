@@ -1,4 +1,4 @@
-# [Prueba Técnica Spring Boot](https://www.youtube.com/watch?v=l-Bl45I6UEY)
+# [🧾 Prueba Técnica Spring Boot](https://www.youtube.com/watch?v=l-Bl45I6UEY)
 
 ## API REST para la gestión de ventas en una cadena de supermercados
 
@@ -106,4 +106,31 @@ Las ventas NO SE PUEDEN MODIFICAR sin permisos de superusuario (no es necesario 
    - Descripción: Calcular el producto más vendido utilizando Java Streams.
   
 
-# [🚢 Dockerizar Prueba Técnica Spring Boot]
+# [🚢 Dockerizar Prueba Técnica Spring Boot](https://www.youtube.com/watch?v=aaTWiVD8mro)
+
+## 🚀 Explicación de las Optimizaciones y Fases
+
+### 1. Fases del Build (Multi-stage Build)
+
+- `builder` **(Fase 1)**: Usa la imagen JDK completa (`...-jdk-...`) porque es necesaria para compilar y ejecutar los tests con Maven.
+
+  - **Cache de dependencias**: Copiar `pom.xml` y ejecutar `mvn dependency:go-offline` por separado asegura que si solo cambias el código de tu aplicación, Docker no tiene que descargar todas las dependencias de Maven de nuevo.
+
+  - **Tests**: Al ejecutar `mvn package -DskipTests=false`, te aseguras de que la suite de tests unitarios y de integración se ejecute antes de generar el JAR final. Si fallan, el *build* fallará.
+
+- `layers` **(Fase 2)**: Esta es la clave de la optimización de Spring Boot.
+
+  - Usa java `-Djarmode=layertools -jar app.jar extract` para descomponer el JAR ejecutable de Spring Boot en capas lógicas: `dependencies`, `spring-boot-loader`, `snapshot-dependencies`, y `application`.
+
+- *`runner` **(Fase 3)**: Es la imagen de producción final y más pequeña.
+
+  - Usa la imagen **JRE** (`...-jre-...`) sin el compilador, lo que reduce drásticamente el tamaño final del contenedor (Principio de **Least Privilege**).
+
+  - **Cache de Capas**: Copiar las capas de Spring Boot en el **orden específico** (`dependencies` primero) aprovecha al máximo el **cache de capas de Docker**. Si solo cambias el código de la aplicación (la capa `application`), solo esa capa debe ser reconstruida, no todas las dependencias.
+
+### 2. Comandos de Optimización de Java
+- `XX:TieredStopAtLevel=1`: Le dice a la **JVM** que compile el código JIT (Just-In-Time) con solo el primer nivel de optimización. Esto reduce el tiempo de **arranque** del *cold start* de Spring Boot a expensas de la máxima optimización a largo plazo, lo cual es ideal para contenedores que se escalan y se reinician con frecuencia.
+
+- `Djava.security.egd=file:/dev/./urandom`: Mejora el rendimiento al acelerar la generación de números aleatorios (importante para sesiones, seguridad, etc.) que a menudo es un cuello de botella en entornos virtuales.
+
+- `Duser.timezone=UTC`: Establece la zona horaria en UTC, lo cual es una buena práctica en contenedores para evitar problemas de localización y asegurar la uniformidad en los logs.
