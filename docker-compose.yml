@@ -26,7 +26,7 @@ services:
           "--quiet",
           "--tries=1",
           "--spider",
-          "http://localhost:9091/health",
+          "http://localhost:8080/health",
         ]
       # Espera 45 segundos para que Spring Boot arranque antes de chequear
       start_period: 45s
