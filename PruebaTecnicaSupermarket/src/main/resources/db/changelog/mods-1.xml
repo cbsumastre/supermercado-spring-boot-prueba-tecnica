@@ -5,7 +5,7 @@
 
   <changeSet id="1" author="cbsumastre">
     <createTable tableName="SUCURSAL">
-      <column name="id" type="IDENTITY">
+      <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="nombre" type="VARCHAR(200)">
@@ -15,13 +15,13 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-
-    <sqlFile path="data/insert-sucursales.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
-
-
   </changeSet>
 
   <changeSet id="2" author="cbsumastre">
+    <sqlFile path="data/insert-sucursales.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
+  </changeSet>
+
+  <changeSet id="3" author="cbsumastre">
     <createTable tableName="CATEGORIA">
       <column name="id" type="VARCHAR(200)">
         <constraints primaryKey="true" nullable="false"/>
@@ -30,15 +30,16 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+  </changeSet>
 
+  <changeSet id="4" author="cbsumastre">
     <sqlFile path="db/changelog/data/insert-categorias-producto.sql" relativeToChangelogFile="false" splitStatements="true" stripComments="true" encoding="UTF-8"/>
-
   </changeSet>
 
 
-  <changeSet id="3" author="cbsumastre">
+  <changeSet id="5" author="cbsumastre">
     <createTable tableName="PRODUCTO">
-      <column name="id" type="IDENTITY">
+      <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true"/>
       </column>
       <column name="nombre" type="VARCHAR(200)">
@@ -56,12 +57,13 @@
     </createTable>
 
     <addForeignKeyConstraint baseTableName="producto" baseColumnNames="categoria_id" constraintName="fk_producto_categoria" referencedTableName="categoria" referencedColumnNames="id" />
-
-    <sqlFile path="data/insert-productos.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8" />
-
   </changeSet>
 
-  <changeSet id="4" author="cbsumastre">
+  <changeSet id="6" author="cbsumastre">
+    <sqlFile path="data/insert-productos.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8" />
+  </changeSet>
+
+  <changeSet id="7" author="cbsumastre">
     <createTable tableName="VENTA">
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true"/>
@@ -79,12 +81,13 @@
     </createTable>
 
     <addForeignKeyConstraint baseTableName="VENTA" baseColumnNames="sucursal_id" constraintName="fk_venta_sucursal" referencedTableName="SUCURSAL" referencedColumnNames="id" onDelete="RESTRICT" />
-
-    <sqlFile path="data/insert-ventas.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
-
   </changeSet>
 
-  <changeSet id="5" author="cbsumastre">
+  <changeSet id="8" author="cbsumastre">
+    <sqlFile path="data/insert-ventas.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
+  </changeSet>
+
+  <changeSet id="9" author="cbsumastre">
     <createTable tableName="DETALLE_VENTA">
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
@@ -105,13 +108,14 @@
 
     <addForeignKeyConstraint baseTableName="DETALLE_VENTA" baseColumnNames="venta_id" constraintName="fk_venta_detalle_venta" referencedTableName="VENTA" referencedColumnNames="id" onDelete="RESTRICT"/>
     <addForeignKeyConstraint baseTableName="DETALLE_VENTA" baseColumnNames="producto_id" constraintName="fk_venta_detalle_producto" referencedTableName="PRODUCTO" referencedColumnNames="id" onDelete="RESTRICT"/>
+  </changeSet>
 
+  <changeSet id="10" author="cbsumastre">
     <sqlFile path="data/insert-detalle-ventas.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true" encoding="UTF-8"/>
-
   </changeSet>
 
 
-  <changeSet id="6" author="cbsumastre">
+  <changeSet id="11" author="cbsumastre">
     <addColumn tableName="VENTA">
       <column name="TOTAL" type="DOUBLE" defaultValueNumeric="0">
         <constraints nullable="true"/>
@@ -133,7 +137,7 @@
       ]]>
     </sql>
 
-    <addNotNullConstraint tableName="VENTA" columnName="TOTAL" />
+    <addNotNullConstraint tableName="VENTA" columnName="TOTAL" columnDataType="DOUBLE" />
 
   </changeSet>
 

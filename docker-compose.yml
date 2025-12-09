@@ -6,28 +6,29 @@ services:
     ports:
       - "9092:9091"
     environment:
-      DB_URL: jdbc:mysql://supermarket-db:3306/supermarket-db?createDatabaseIfNotExists=true&serverTimezone=Europe/Madrid
-      DB_USER_NAME: "root"
+      DB_URL: jdbc:postgresql://postgres-db:5432/supermarket_db
+      DB_USER_NAME: "supermarket_user"
       DB_PASSWORD: "1234"
-      DB_PLATFORM: "org.hibernate.dialect.MySQL8Dialect"
-      DB_DRIVER: "com.mysql.cj.jdbc.Driver"
+      DB_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"
+      DB_DRIVER: "org.postgresql.Driver"
       SPRING_H2_CONSOLE_ENABLED: "false"
     restart: always
     depends_on:
-      supermarket-db:
+      postgres-db:
         condition: service_healthy
 
-  supermarket-db:
-    image: mysql:9.4.0
-    container_name: supermarket-db
+  postgres-db:
+    image: postgres:16
+    container_name: postgres-db
     ports:
-      - "3307:3306"
+      - "5433:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_PASSWORD: 1234
-      MYSQL_DATABASE: supermarket-db
+      POSTGRES_USER: supermarket_user
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: supermarket_db
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 10
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"] # Check de salud para PostgreSQL
+      timeout: 5s
+      retries: 5
+      start_period: 10s
